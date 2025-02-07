@@ -376,15 +376,15 @@ platform :ios do
       setupIOSSigningCertificate()
 
       install_provisioning_profile(
-        path: ENV["APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_PATH"]
+        path: "./" + ENV["APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_FILE"]
       )
 
       install_provisioning_profile(
-        path: ENV["APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_PATH"]
+        path: "./" + ENV["APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_FILE"]
       )
 
       install_provisioning_profile(
-        path: ENV["APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_PATH"]
+        path: "./" + ENV["APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_FILE"]
       )
 
       build_app(
