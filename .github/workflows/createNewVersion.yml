@@ -32,6 +32,9 @@ on:
       OP_SERVICE_ACCOUNT_TOKEN:
         description: 1Password service account token
         required: true
+      OS_BOTIFY_APP_ID:
+        description: Application ID for OS Botify
+        required: true
 
 jobs:
   validateActor:
