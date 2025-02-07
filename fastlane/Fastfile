@@ -376,15 +376,15 @@ platform :ios do
       setupIOSSigningCertificate()
 
       install_provisioning_profile(
-        path: "./OldApp_AppStore.mobileprovision"
+        path: ENV["APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_PATH"]
       )
 
       install_provisioning_profile(
-        path: "./OldApp_AppStore_Share_Extension.mobileprovision"
+        path: ENV["APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_PATH"]
       )
 
       install_provisioning_profile(
-        path: "./OldApp_AppStore_Notification_Service.mobileprovision"
+        path: ENV["APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_PATH"]
       )
 
       build_app(
@@ -395,9 +395,9 @@ platform :ios do
         export_options: {
           manageAppVersionAndBuildNumber: false,
           provisioningProfiles: {
-              "com.expensify.expensifylite" => "(OldApp) AppStore",
-              "com.expensify.expensifylite.SmartScanExtension" => "(OldApp) AppStore: Share Extension",
-              "com.expensify.expensifylite.NotificationServiceExtension" => "(OldApp) AppStore: Notification Service",
+              ENV["APPLE_HYBRID_APP_ID"] => ENV["APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_NAME"],
+              ENV["APPLE_HYBRID_APP_ID"] + ".SmartScanExtension" => ENV["APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_NAME"],
+              ENV["APPLE_HYBRID_APP_ID"] + ".NotificationServiceExtension" => ENV["APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_NAME"],
           }
         }
       )
@@ -553,7 +553,7 @@ platform :ios do
   desc "Upload HybridApp to TestFlight"
     lane :upload_testflight_hybrid do
       upload_to_testflight(
-        app_identifier: "com.expensify.expensifylite",
+        app_identifier: ENV["APPLE_HYBRID_APP_ID"],
         api_key_path: "./ios-fastlane-json-key.json",
         distribute_external: true,
         notify_external_testers: true,
@@ -578,7 +578,7 @@ platform :ios do
 
     puts "dsym path: #{ENV[KEY_DSYM_PATH]}"
     upload_symbols_to_crashlytics(
-      app_id: "1:1008697809946:ios:3ffad71f664f2886",
+      app_id: ENV["FIREBASE_HYBRID_APP_ID"],
       dsym_path: ENV[KEY_DSYM_PATH],
       gsp_path: "./ios/GoogleService-Info.plist",
       # Assuming we are running this from the react-native submodule directory for HybridApp
