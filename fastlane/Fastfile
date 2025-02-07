@@ -658,7 +658,7 @@ platform :ios do
         api_token = Spaceship::ConnectAPI::Token.from_json_file("../ios/ios-fastlane-json-key.json")
         Spaceship::ConnectAPI.token = api_token
 
-        app = Spaceship::ConnectAPI::App.find("com.expensify.expensifylite")
+        app = Spaceship::ConnectAPI::App.find(ENV["APPLE_HYBRID_APP_ID"])
         version = app.get_live_app_store_version(platform: Spaceship::ConnectAPI::Platform::IOS)
 
         # Skip if the version is already at 100% rollout
@@ -673,7 +673,7 @@ platform :ios do
   desc "Submit HybridApp for production App Store slow rollout"
     lane :submit_hybrid_for_rollout do
       deliver(
-        app_identifier: "com.expensify.expensifylite",
+        app_identifier: ENV["APPLE_HYBRID_APP_ID"],
         api_key_path: "./ios-fastlane-json-key.json",
 
         # Skip HTML report verification

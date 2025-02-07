@@ -545,6 +545,7 @@ jobs:
           bundle exec fastlane ios submit_hybrid_for_rollout
         env:
           VERSION: ${{ steps.getIOSVersion.outputs.IOS_VERSION }}
+          APPLE_HYBRID_APP_ID: ${{ vars.APPLE_HYBRID_APP_ID }}
 
       - name: Upload iOS build to Browser Stack
         if: ${{ !fromJSON(env.SHOULD_DEPLOY_PRODUCTION) }}
