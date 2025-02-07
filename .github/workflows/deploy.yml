@@ -42,7 +42,7 @@ jobs:
           token: ${{ secrets.OS_BOTIFY_TOKEN }}
 
       - name: Setup git for OSBotify
-        uses: ./.github/actions/composite/setupGitForOSBotifyApp
+        uses: Expensify/GitHub-Actions/setupGitForOSBotify@main
         id: setupGitForOSBotify
         with:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
