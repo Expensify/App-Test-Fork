@@ -21,6 +21,25 @@ jobs:
           OS_BOTIFY_APP_ID: ${{ secrets.OS_BOTIFY_APP_ID }}
           OS_BOTIFY_PRIVATE_KEY: ${{ secrets.OS_BOTIFY_PRIVATE_KEY }}
 
+      - name: Log repo sync status before syncing
+        run: |
+          echo "=== BEFORE SYNC ==="
+
+          echo "::group::Mobile-Expensify-Test-Fork Sync Status"
+          gh repo sync Expensify/Mobile-Expensify-Test-Fork --dry-run || true
+          echo "::endgroup::"
+
+          echo "::group::App-Test-Fork Sync Status"
+          gh repo sync Expensify/App-Test-Fork --dry-run || true
+          echo "::endgroup::"
+
+          echo "::group::HEAD Commits Before Sync"
+          echo "Expensify/App-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/App-Test-Fork.git refs/heads/main | awk '{print $1}')"
+          echo "Expensify/Mobile-Expensify-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/Mobile-Expensify-Test-Fork.git refs/heads/main | awk '{print $1}')"
+          echo "::endgroup::"
+        env:
+          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
+
       - name: Sync Mobile-Expensify-Test-Fork with upstream
         run: gh repo sync Expensify/Mobile-Expensify-Test-Fork
         env:
@@ -64,3 +83,22 @@ jobs:
           git add .gitmodules Mobile-Expensify
           git commit -m "Point Mobile-Expensify submodule to latest Mobile-Expensify-Test-Fork main"
           git push origin main
+
+      - name: Log repo sync status after syncing
+        run: |
+          echo "=== AFTER SYNC ==="
+
+          echo "::group::App-Test-Fork Sync Status"
+          gh repo sync Expensify/App-Test-Fork --dry-run || true
+          echo "::endgroup::"
+
+          echo "::group::Mobile-Expensify-Test-Fork Sync Status"
+          gh repo sync Expensify/Mobile-Expensify-Test-Fork --dry-run || true
+          echo "::endgroup::"
+
+          echo "::group::HEAD Commits After Sync"
+          echo "Expensify/App-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/App-Test-Fork.git refs/heads/main | awk '{print $1}')"
+          echo "Expensify/Mobile-Expensify-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/Mobile-Expensify-Test-Fork.git refs/heads/main | awk '{print $1}')"
+          echo "::endgroup::"
+        env:
+          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
