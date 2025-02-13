@@ -23,6 +23,8 @@ jobs:
 
       - name: Sync Mobile-Expensify-Test-Fork with upstream
         run: gh repo sync Expensify/Mobile-Expensify-Test-Fork
+        env:
+          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
 
       - name: Get upstream Mobile-Expensify commit
         id: getUpstreamSubmoduleCommit
@@ -41,6 +43,8 @@ jobs:
 
       - name: Sync App-Test-Fork with upstream
         run: gh repo sync Expensify/App-Test-Fork
+        env:
+          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
 
       - name: Point Mobile-Expensify submodule back to Mobile-Expensify-Test-Fork
         run: |
