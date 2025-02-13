@@ -2,6 +2,9 @@ name: 'Setup Git for OSBotify'
 description: 'Setup Git for OSBotify'
 
 inputs:
+  OP_VAULT:
+    description: 1Password vault where OSBotify GPG key can be found
+    required: true
   OP_SERVICE_ACCOUNT_TOKEN:
     description: "1Password service account token"
     required: true
