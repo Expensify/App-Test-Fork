@@ -17,9 +17,6 @@ inputs:
   OS_BOTIFY_PRIVATE_KEY:
     description: "OS Botify's private key"
     required: true
-  OP_VAULT:
-    description: "1Password vault to read the GPG private key from"
-    required: true
 
 outputs:
   # Do not try to use this for committing code. Use `secrets.OS_BOTIFY_COMMIT_TOKEN` instead

@@ -8,9 +8,6 @@ inputs:
   OP_SERVICE_ACCOUNT_TOKEN:
     description: "1Password service account token"
     required: true
-  OP_VAULT:
-    description: "1Password vault to read the GPG private key from"
-    required: true
 
 runs:
   using: composite
