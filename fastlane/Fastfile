@@ -76,6 +76,7 @@ platform :android do
         project_dir: 'Mobile-Expensify/Android',
         task: "bundleRelease",
         flags: "--refresh-dependencies",
+        flavor: ENV["ANDROID_FLAVOR"],
         properties: {
             "android.injected.signing.store.file" => './upload-key.keystore',
             "android.injected.signing.store.password" => ENV["ANDROID_UPLOAD_KEYSTORE_PASSWORD"],
