@@ -59,17 +59,16 @@ jobs:
         run: |
           git submodule update --init
           cd Mobile-Expensify
-
+g
           if [[ "$(git rev-parse HEAD)" != ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }} ]]; then
             git remote add upstream https://github.com/Expensify/Mobile-Expensify.git
             git fetch upstream ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }}
             git checkout ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }}
+            cd ..
+            git add Mobile-Expensify
+            git commit -m "Temporarily reset submodule to match upstream"
+            git push origin main
           fi
-
-          cd ..
-          git add Mobile-Expensify
-          git commit -m "Temporarily reset submodule to match upstream"
-          git push origin main
 
       - name: Sync App-Test-Fork with upstream
         run: gh repo sync Expensify/App-Test-Fork
