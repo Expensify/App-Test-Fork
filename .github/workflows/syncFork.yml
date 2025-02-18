@@ -59,7 +59,7 @@ jobs:
         run: |
           git submodule update --init
           cd Mobile-Expensify
-g
+
           if [[ "$(git rev-parse HEAD)" != ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }} ]]; then
             git remote add upstream https://github.com/Expensify/Mobile-Expensify.git
             git fetch upstream ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }}
