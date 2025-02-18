@@ -354,6 +354,10 @@ platform :ios do
       path: "./NewApp_AppStore_Notification_Service.mobileprovision"
     )
 
+    install_provisioning_profile(
+      path: "./NewApp_AppStore_Share_Extension.mobileprovision"
+    )
+
     build_app(
       workspace: "./ios/NewExpensify.xcworkspace",
       scheme: "New Expensify",
@@ -362,6 +366,7 @@ platform :ios do
         provisioningProfiles: {
           "com.chat.expensify.chat" => "(NewApp) AppStore",
           "com.chat.expensify.chat.NotificationServiceExtension" => "(NewApp) AppStore: Notification Service",
+          "com.chat.expensify.chat.ShareViewController" => "(NewApp) AppStore: Share Extension",
         },
         manageAppVersionAndBuildNumber: false
       }
@@ -486,6 +491,10 @@ platform :ios do
       path: "./NewApp_AdHoc_Notification_Service.mobileprovision"
     )
 
+    install_provisioning_profile(
+      path: "./NewApp_AdHoc_Share_Extension.mobileprovision"
+    )
+
     build_app(
       workspace: "./ios/NewExpensify.xcworkspace",
       skip_profile_detection: true,
@@ -496,6 +505,7 @@ platform :ios do
         provisioningProfiles: {
           "com.expensify.chat.adhoc" => "(NewApp) AdHoc",
           "com.expensify.chat.adhoc.NotificationServiceExtension" => "(NewApp) AdHoc: Notification Service",
+          "com.expensify.chat.adhoc.ShareViewController" => "(NewApp) AdHoc: Share Extension",
         },
         manageAppVersionAndBuildNumber: false
       }

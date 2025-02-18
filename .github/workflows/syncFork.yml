@@ -1,0 +1,117 @@
+# This workflow is used to sync the App-Test-Fork with the upstream automatically,
+# while keeping the Mobile-Expensify submodule pointed at Mobile-Expensify-Test-Fork.
+name: Sync fork
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.OS_BOTIFY_TOKEN }}
+          submodules: true
+
+      - name: Setup Git for OSBotify
+        uses: Expensify/GitHub-Actions/setupGitForOSBotify@main
+        with:
+          OP_VAULT: ${{ vars.OP_VAULT }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          OS_BOTIFY_APP_ID: ${{ secrets.OS_BOTIFY_APP_ID }}
+          OS_BOTIFY_PRIVATE_KEY: ${{ secrets.OS_BOTIFY_PRIVATE_KEY }}
+          SETUP_AS_APP: false
+
+#      - name: Log repo sync status before syncing
+#        run: |
+#          echo "=== BEFORE SYNC ==="
+#
+#          echo "::group::Mobile-Expensify-Test-Fork Sync Status"
+#          gh repo sync Expensify/Mobile-Expensify-Test-Fork --dry-run || true
+#          echo "::endgroup::"
+#
+#          echo "::group::App-Test-Fork Sync Status"
+#          gh repo sync Expensify/App-Test-Fork --dry-run || true
+#          echo "::endgroup::"
+#
+#          echo "::group::HEAD Commits Before Sync"
+#          echo "Expensify/App-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/App-Test-Fork.git refs/heads/main | awk '{print $1}')"
+#          echo "Expensify/Mobile-Expensify-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/Mobile-Expensify-Test-Fork.git refs/heads/main | awk '{print $1}')"
+#          echo "::endgroup::"
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
+
+      - name: Sync Mobile-Expensify-Test-Fork with upstream
+        run: gh repo sync Expensify/Mobile-Expensify-Test-Fork
+        env:
+          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
+
+      - name: Get upstream Mobile-Expensify commit
+        id: getUpstreamSubmoduleCommit
+        run: |
+          git remote add upstream https://github.com/Expensify/App.git
+          git fetch upstream main --depth=1
+          UPSTREAM_SUBMODULE_COMMIT=$(git ls-tree upstream/main Mobile-Expensify | awk '{print $3}')
+          echo "UPSTREAM_SUBMODULE_COMMIT=$UPSTREAM_SUBMODULE_COMMIT" >> "$GITHUB_OUTPUT"
+
+      - name: Temporarily reset submodule to upstream's commit
+        run: |
+          git submodule update --init
+          cd Mobile-Expensify
+
+          if [[ "$(git rev-parse HEAD)" != ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }} ]]; then
+            git remote add upstream https://github.com/Expensify/Mobile-Expensify.git
+            git fetch upstream ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }}
+            git checkout ${{ steps.getUpstreamSubmoduleCommit.outputs.UPSTREAM_SUBMODULE_COMMIT }}
+            cd ..
+            git add Mobile-Expensify
+            git commit -m "Temporarily reset submodule to match upstream"
+            git push origin main
+          fi
+
+      - name: Sync App-Test-Fork with upstream
+        run: gh repo sync Expensify/App-Test-Fork
+        env:
+          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
+
+      - name: Point Mobile-Expensify submodule back to Mobile-Expensify-Test-Fork
+        run: |
+          # Pull changes after repo sync
+          git pull origin main
+
+          # Ensure correct submodule URL
+          git config -f .gitmodules submodule.Mobile-Expensify.url git@github.com:Expensify/Mobile-Expensify-Test-Fork.git
+          git submodule sync
+
+          # Fetch the latest commit from Mobile-Expensify-Test-Fork
+          git fetch https://github.com/Expensify/Mobile-Expensify-Test-Fork.git main --depth=1
+          LATEST_SUBMODULE_COMMIT=$(git ls-remote https://github.com/Expensify/Mobile-Expensify-Test-Fork.git refs/heads/main | awk '{print $1}')
+
+          # Checkout the submodule to the latest commit
+          cd Mobile-Expensify
+          git checkout "$LATEST_SUBMODULE_COMMIT"
+          cd ..
+
+          git add .gitmodules Mobile-Expensify
+          git commit -m "Point Mobile-Expensify submodule to latest Mobile-Expensify-Test-Fork main"
+          git push origin main
+
+#      - name: Log repo sync status after syncing
+#        run: |
+#          echo "=== AFTER SYNC ==="
+#
+#          echo "::group::App-Test-Fork Sync Status"
+#          gh repo sync Expensify/App-Test-Fork --dry-run || true
+#          echo "::endgroup::"
+#
+#          echo "::group::Mobile-Expensify-Test-Fork Sync Status"
+#          gh repo sync Expensify/Mobile-Expensify-Test-Fork --dry-run || true
+#          echo "::endgroup::"
+#
+#          echo "::group::HEAD Commits After Sync"
+#          echo "Expensify/App-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/App-Test-Fork.git refs/heads/main | awk '{print $1}')"
+#          echo "Expensify/Mobile-Expensify-Test-Fork HEAD: $(git ls-remote https://github.com/Expensify/Mobile-Expensify-Test-Fork.git refs/heads/main | awk '{print $1}')"
+#          echo "::endgroup::"
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_TOKEN }}
