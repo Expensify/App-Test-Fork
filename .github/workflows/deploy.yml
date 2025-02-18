@@ -502,9 +502,9 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
         run: |
           op read "op://${{ vars.OP_VAULT }}/firebase.json/firebase.json" --force --out-file ./firebase.json
-          op read "op://${{ vars.OP_VAULT }}/OldApp_AppStore/${{ vars.APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_FILE }}" --force --out-file ./OldApp_AppStore.mobileprovision
-          op read "op://${{ vars.OP_VAULT }}/OldApp_AppStore_Share_Extension/${{ vars.APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_FILE }}" --force --out-file ./OldApp_AppStore_Share_Extension.mobileprovision
-          op read "op://${{ vars.OP_VAULT }}/OldApp_AppStore_Notification_Service/${{ vars.APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_FILE }}" --force --out-file ./OldApp_AppStore_Notification_Service.mobileprovision
+          op read "op://${{ vars.OP_VAULT }}/OldApp_AppStore/${{ vars.APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_FILE }}" --force --out-file ./${{ vars.APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_FILE }}
+          op read "op://${{ vars.OP_VAULT }}/OldApp_AppStore_Share_Extension/${{ vars.APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_FILE }}" --force --out-file ./${{ vars.APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_FILE }}
+          op read "op://${{ vars.OP_VAULT }}/OldApp_AppStore_Notification_Service/${{ vars.APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_FILE }}" --force --out-file ./${{ vars.APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_FILE }}
           op read "op://${{ vars.OP_VAULT }}/ios-fastlane-json-key.json/ios-fastlane-json-key.json" --force --out-file ./ios-fastlane-json-key.json
           op read "op://${{ vars.OP_VAULT }}/New Expensify Distribution Certificate/Certificates.p12" --force --out-file ./Certificates.p12
 
