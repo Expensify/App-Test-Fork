@@ -74,6 +74,9 @@ jobs:
 
       - name: Point Mobile-Expensify submodule back to Mobile-Expensify-Test-Fork
         run: |
+          # Pull changes after repo sync
+          git pull origin main
+
           # Ensure correct submodule URL
           git config -f .gitmodules submodule.Mobile-Expensify.url git@github.com:Expensify/Mobile-Expensify-Test-Fork.git
           git submodule sync
