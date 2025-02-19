@@ -402,13 +402,13 @@ platform :ios do
       update_app_identifier(
         xcodeproj: "Mobile-Expensify/iOS/Expensify.xcodeproj", # Optional path to xcodeproj, will use the first .xcodeproj if not set
         plist_path: "SmartScanExtension/Info.plist", # Path to info plist file, relative to xcodeproj
-        app_identifier: ENV["APPLE_HYBRID_APP_ID"] # The App Identifier
+        app_identifier: ENV["APPLE_HYBRID_APP_ID"] + ".SmartScanExtension" # The App Identifier
       )
 
       update_app_identifier(
         xcodeproj: "Mobile-Expensify/iOS/Expensify.xcodeproj", # Optional path to xcodeproj, will use the first .xcodeproj if not set
         plist_path: "NotificationServiceExtension/Info.plist", # Path to info plist file, relative to xcodeproj
-        app_identifier: ENV["APPLE_HYBRID_APP_ID"] # The App Identifier
+        app_identifier: ENV["APPLE_HYBRID_APP_ID"] + ".NotificationServiceExtension" # The App Identifier
       )
 
 
