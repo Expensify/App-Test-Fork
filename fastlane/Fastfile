@@ -393,24 +393,29 @@ platform :ios do
         path: "./" + ENV["APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_FILE"]
       )
 
-      update_app_identifier(
-        xcodeproj: "Mobile-Expensify/iOS/Expensify.xcodeproj", # Optional path to xcodeproj, will use the first .xcodeproj if not set
-        plist_path: "Expensify/Expensify-Info.plist", # Path to info plist file, relative to xcodeproj
-        app_identifier: ENV["APPLE_HYBRID_APP_ID"] # The App Identifier
+      update_code_signing_settings(
+         path: "Mobile-Expensify/iOS/Expensify.xcodeproj",
+         profile_name: ENV["APPLE_HYBRID_APP_STORE_PROVISIONING_PROFILE_NAME"],
+         targets: "Expensify",
+         bundle_identifier: ENV["APPLE_HYBRID_APP_ID"],
+         build_configurations: "Release"
       )
 
-      update_app_identifier(
-        xcodeproj: "Mobile-Expensify/iOS/Expensify.xcodeproj", # Optional path to xcodeproj, will use the first .xcodeproj if not set
-        plist_path: "SmartScanExtension/Info.plist", # Path to info plist file, relative to xcodeproj
-        app_identifier: ENV["APPLE_HYBRID_APP_ID"] + ".SmartScanExtension" # The App Identifier
+      update_code_signing_settings(
+         path: "Mobile-Expensify/iOS/Expensify.xcodeproj",
+         profile_name: ENV["APPLE_HYBRID_APP_SHARE_PROVISIONING_PROFILE_NAME"],
+         targets: "SmartScanExtension",
+         bundle_identifier: ENV["APPLE_HYBRID_APP_ID"] + ".SmartScanExtension",
+         build_configurations: "Release"
       )
 
-      update_app_identifier(
-        xcodeproj: "Mobile-Expensify/iOS/Expensify.xcodeproj", # Optional path to xcodeproj, will use the first .xcodeproj if not set
-        plist_path: "NotificationServiceExtension/Info.plist", # Path to info plist file, relative to xcodeproj
-        app_identifier: ENV["APPLE_HYBRID_APP_ID"] + ".NotificationServiceExtension" # The App Identifier
+      update_code_signing_settings(
+         path: "Mobile-Expensify/iOS/Expensify.xcodeproj",
+         profile_name: ENV["APPLE_HYBRID_APP_NOTIFICATION_PROVISIONING_PROFILE_NAME"],
+         targets: "NotificationServiceExtension",
+         bundle_identifier: ENV["APPLE_HYBRID_APP_ID"] + ".NotificationServiceExtension",
+         build_configurations: "Release"
       )
-
 
       build_app(
         workspace: "Mobile-Expensify/iOS/Expensify.xcworkspace",
