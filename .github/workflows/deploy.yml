@@ -6,6 +6,7 @@ on:
 
 env:
   SHOULD_DEPLOY_PRODUCTION: ${{ github.ref == 'refs/heads/production' }}
+  IS_APP_REPO: ${{ github.repository == 'Expensify/App' }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -400,6 +401,10 @@ jobs:
           APPLE_DEMO_EMAIL: ${{ secrets.APPLE_DEMO_EMAIL }}
           APPLE_DEMO_PASSWORD: ${{ secrets.APPLE_DEMO_PASSWORD }}
 
+      - name: Upload DSYMs to Firebase
+        if: ${{ fromJSON(env.SHOULD_DEPLOY_PRODUCTION) }}
+        run: bundle exec fastlane ios upload_dsyms
+
       - name: Upload iOS build to Browser Stack
         if: ${{ !fromJSON(env.SHOULD_DEPLOY_PRODUCTION) }}
         run: curl -u "$BROWSERSTACK" -X POST "https://api-cloud.browserstack.com/app-live/upload" -F "file=@/Users/runner/work/App/App/New Expensify.ipa"
@@ -536,7 +541,10 @@ jobs:
           APPLE_DEMO_EMAIL: ${{ secrets.APPLE_DEMO_EMAIL }}
           APPLE_DEMO_PASSWORD: ${{ secrets.APPLE_DEMO_PASSWORD }}
           APPLE_HYBRID_APP_ID: ${{ vars.APPLE_HYBRID_APP_ID }}
-          FIREBASE_HYBRID_APP_ID: ${{ vars.FIREBASE_HYBRID_APP_ID }}
+
+      - name: Upload DSYMs to Firebase for HybridApp
+        if: ${{ fromJSON(env.IS_APP_REPO) && !fromJSON(env.SHOULD_DEPLOY_PRODUCTION) }}
+        run: bundle exec fastlane ios upload_dsyms_hybrid
 
       - name: Submit production build for App Store review and a slow rollout
         if: ${{ fromJSON(env.SHOULD_DEPLOY_PRODUCTION) }}
@@ -551,7 +559,7 @@ jobs:
           APPLE_HYBRID_APP_ID: ${{ vars.APPLE_HYBRID_APP_ID }}
 
       - name: Upload iOS build to Browser Stack
-        if: ${{ !fromJSON(env.SHOULD_DEPLOY_PRODUCTION) }}
+        if: ${{ fromJSON(env.IS_APP_REPO) && !fromJSON(env.SHOULD_DEPLOY_PRODUCTION) }}
         run: curl -u "$BROWSERSTACK" -X POST "https://api-cloud.browserstack.com/app-live/upload" -F "file=@${{ env.ipaPath }}"
         env:
           BROWSERSTACK: ${{ secrets.BROWSERSTACK }}
