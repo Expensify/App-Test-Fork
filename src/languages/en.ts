@@ -109,6 +109,7 @@ import type {
     MissingPropertyParams,
     MovedFromPersonalSpaceParams,
     NeedCategoryForExportToIntegrationParams,
+    NewWorkspaceNameParams,
     NoLongerHaveAccessParams,
     NotAllowedExtensionParams,
     NotYouParams,
@@ -126,6 +127,7 @@ import type {
     PayerPaidParams,
     PayerSettledParams,
     PaySomeoneParams,
+    PolicyExpenseChatNameParams,
     ReconciliationWorksParams,
     RemovedFromApprovalWorkflowParams,
     RemovedTheRequestParams,
@@ -367,7 +369,6 @@ const translations = {
             phoneNumber: `Please enter a valid phone number, with the country code (e.g. ${CONST.EXAMPLE_PHONE_NUMBER})`,
             fieldRequired: 'This field is required.',
             requestModified: 'This request is being modified by another member.',
-            characterLimit: ({limit}: CharacterLimitParams) => `Exceeds the maximum length of ${limit} characters`,
             characterLimitExceedCounter: ({length, limit}: CharacterLengthLimitParams) => `Character limit exceeded (${length}/${limit})`,
             dateInvalid: 'Please select a valid date.',
             invalidDateShouldBeFuture: 'Please choose today or a future date.',
@@ -375,6 +376,9 @@ const translations = {
             invalidCharacter: 'Invalid character.',
             enterMerchant: 'Enter a merchant name.',
             enterAmount: 'Enter an amount.',
+            missingMerchantName: 'Missing merchant name',
+            missingAmount: 'Missing amount',
+            missingDate: 'Missing date',
             enterDate: 'Enter a date.',
             invalidTimeRange: 'Please enter a time using the 12-hour clock format (e.g., 2:30 PM).',
             pleaseCompleteForm: 'Please complete the form above to continue.',
@@ -413,6 +417,7 @@ const translations = {
         youAppearToBeOffline: 'You appear to be offline.',
         thisFeatureRequiresInternet: 'This feature requires an active internet connection.',
         attachementWillBeAvailableOnceBackOnline: 'Attachment will become available once back online.',
+        errorOccuredWhileTryingToPlayVideo: 'An error occurred while trying to play this video.',
         areYouSure: 'Are you sure?',
         verify: 'Verify',
         yesContinue: 'Yes, continue',
@@ -518,6 +523,11 @@ const translations = {
         subrate: 'Subrate',
         perDiem: 'Per diem',
         validate: 'Validate',
+        downloadAsPDF: 'Download as PDF',
+        downloadAsCSV: 'Download as CSV',
+        help: 'Help',
+        expenseReports: 'Expense Reports',
+        rateOutOfPolicy: 'Rate out of policy',
     },
     supportalNoAccess: {
         title: 'Not so fast',
@@ -716,7 +726,9 @@ const translations = {
         beginningOfArchivedRoomPartTwo: ", there's nothing to see here.",
         beginningOfChatHistoryDomainRoomPartOne: ({domainRoom}: BeginningOfChatHistoryDomainRoomPartOneParams) => `This chat is with all Expensify members on the ${domainRoom} domain.`,
         beginningOfChatHistoryDomainRoomPartTwo: ' Use it to chat with colleagues, share tips, and ask questions.',
-        beginningOfChatHistoryAdminRoomPartOne: ({workspaceName}: BeginningOfChatHistoryAdminRoomPartOneParams) => `This chat is with ${workspaceName} admins.`,
+        beginningOfChatHistoryAdminRoomPartOneFirst: 'This chat is with',
+        beginningOfChatHistoryAdminRoomPartOneLast: 'admin.',
+        beginningOfChatHistoryAdminRoomWorkspaceName: ({workspaceName}: BeginningOfChatHistoryAdminRoomPartOneParams) => ` ${workspaceName} `,
         beginningOfChatHistoryAdminRoomPartTwo: ' Use it to chat about workspace setup and more.',
         beginningOfChatHistoryAnnounceRoomPartOne: ({workspaceName}: BeginningOfChatHistoryAnnounceRoomPartOneParams) => `This chat is with everyone in ${workspaceName}.`,
         beginningOfChatHistoryAnnounceRoomPartTwo: ` Use it for the most important announcements.`,
@@ -860,17 +872,15 @@ const translations = {
     },
     quickAction: {
         scanReceipt: 'Scan receipt',
-        recordDistance: 'Record distance',
+        recordDistance: 'Track distance',
         requestMoney: 'Create expense',
+        perDiem: 'Create per diem',
         splitBill: 'Split expense',
         splitScan: 'Split receipt',
         splitDistance: 'Split distance',
         paySomeone: ({name}: PaySomeoneParams = {}) => `Pay ${name ?? 'someone'}`,
         assignTask: 'Assign task',
         header: 'Quick action',
-        trackManual: 'Create expense',
-        trackScan: 'Scan receipt',
-        trackDistance: 'Track distance',
         noLongerHaveReportAccess: 'You no longer have access to your previous quick action destination. Pick a new one below.',
         updateDestination: 'Update destination',
     },
@@ -902,7 +912,7 @@ const translations = {
         canceled: 'Canceled',
         posted: 'Posted',
         deleteReceipt: 'Delete receipt',
-        deletedTransaction: ({amount, merchant}: DeleteTransactionParams) => `deleted an expense on this report,  ${merchant} - ${amount}`,
+        deletedTransaction: ({amount, merchant}: DeleteTransactionParams) => `deleted an expense on this report, ${merchant} - ${amount}`,
         pendingMatchWithCreditCard: 'Receipt pending match with card transaction',
         pendingMatch: 'Pending match',
         pendingMatchWithCreditCardDescription: 'Receipt pending match with card transaction. Mark as cash to cancel.',
@@ -1159,6 +1169,9 @@ const translations = {
             `Please upload an image larger than ${minHeightInPx}x${minWidthInPx} pixels and smaller than ${maxHeightInPx}x${maxWidthInPx} pixels.`,
         notAllowedExtension: ({allowedExtensions}: NotAllowedExtensionParams) => `Profile picture must be one of the following types: ${allowedExtensions.join(', ')}.`,
     },
+    modal: {
+        backdropLabel: 'Modal Backdrop',
+    },
     profilePage: {
         profile: 'Profile',
         preferredPronouns: 'Preferred pronouns',
@@ -1185,6 +1198,7 @@ const translations = {
     securityPage: {
         title: 'Security options',
         subtitle: 'Enable two-factor authentication to keep your account safe.',
+        goToSecurity: 'Go back to security page',
     },
     shareCodePage: {
         title: 'Your code',
@@ -1733,6 +1747,10 @@ const translations = {
     },
     reportDetailsPage: {
         inWorkspace: ({policyName}: ReportPolicyNameParams) => `in ${policyName}`,
+        generatingPDF: 'Generating PDF',
+        waitForPDF: 'Please wait while we generate the PDF',
+        errorPDF: 'There was an error when trying to generate your PDF.',
+        generatedPDF: 'Your report PDF has been generated!',
     },
     reportDescriptionPage: {
         roomDescription: 'Room description',
@@ -1840,7 +1858,7 @@ const translations = {
         listOfWorkspaces: "Here's the list of workspaces you can join. Don't worry, you can always join them later if you prefer.",
         workspaceMemberList: ({employeeCount, policyOwner}: WorkspaceMemberList) => `${employeeCount} member${employeeCount > 1 ? 's' : ''} • ${policyOwner}`,
         whereYouWork: 'Where do you work?',
-        errorSelection: 'Please make a selection to continue.',
+        errorSelection: 'Select an option to move forward.',
         purpose: {
             title: 'What do you want to do today?',
             errorContinue: 'Please press continue to get set up.',
@@ -2145,7 +2163,7 @@ const translations = {
         noOverdraftOrCredit: 'No overdraft/credit feature.',
         electronicFundsWithdrawal: 'Electronic funds withdrawal',
         standard: 'Standard',
-        reviewTheFees: 'Please review the fees below.',
+        reviewTheFees: 'Take a look at some fees.',
         checkTheBoxes: 'Please check the boxes below.',
         agreeToTerms: 'Agree to the terms and you’ll be good to go!',
         shortTermsForm: {
@@ -2160,7 +2178,7 @@ const translations = {
             customerService: 'Customer service',
             automatedOrLive: '(automated or live agent)',
             afterTwelveMonths: '(after 12 months with no transactions)',
-            weChargeOneFee: 'We charge one type of fee.',
+            weChargeOneFee: 'We charge 1 other type of fee. It is:',
             fdicInsurance: 'Your funds are eligible for FDIC insurance.',
             generalInfo: 'For general information about prepaid accounts, visit',
             conditionsDetails: 'For details and conditions for all fees and services, visit',
@@ -2170,9 +2188,9 @@ const translations = {
         },
         longTermsForm: {
             listOfAllFees: 'A list of all Expensify Wallet fees',
-            typeOfFeeHeader: 'Type of fee',
-            feeAmountHeader: 'Fee amount',
-            moreDetailsHeader: 'More details',
+            typeOfFeeHeader: 'All fees',
+            feeAmountHeader: 'Amount',
+            moreDetailsHeader: 'Details',
             openingAccountTitle: 'Opening an account',
             openingAccountDetails: "There's no fee to open an account.",
             monthlyFeeDetails: "There's no monthly fee.",
@@ -2192,7 +2210,8 @@ const translations = {
             fdicInsuranceBancorp: ({amount}: TermsParams) =>
                 'Your funds are eligible for FDIC insurance. Your funds will be held at or ' +
                 `transferred to ${CONST.WALLET.PROGRAM_ISSUERS.BANCORP_BANK}, an FDIC-insured institution. Once there, your funds are insured up ` +
-                `to ${amount} by the FDIC in the event ${CONST.WALLET.PROGRAM_ISSUERS.BANCORP_BANK} fails. See`,
+                `to ${amount} by the FDIC in the event ${CONST.WALLET.PROGRAM_ISSUERS.BANCORP_BANK} fails, if specific deposit insurance requirements ` +
+                `are met and your card is registered. See`,
             fdicInsuranceBancorp2: 'for details.',
             contactExpensifyPayments: `Contact ${CONST.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS} by calling +1 833-400-0904, by email at`,
             contactExpensifyPayments2: 'or sign in at',
@@ -2629,9 +2648,9 @@ const translations = {
             title: 'Get started with Expensify Travel',
             message: `You'll need to use your work email (e.g., name@company.com) with Expensify Travel, not your personal email (e.g., name@gmail.com).`,
         },
-        maintenance: {
-            title: 'Expensify Travel is getting an upgrade! 🚀',
-            message: `It'll be unavailable February 23-24, but back and better than ever after that. If you need help with a current trip, please call +1 866-296-7768. Thanks!`,
+        blockedFeatureModal: {
+            title: 'Expensify Travel has been disabled',
+            message: `Your admin has turned off Expensify Travel. Please follow your company's booking policy for travel arrangements.`,
         },
     },
     workspace: {
@@ -2743,6 +2762,7 @@ const translations = {
             submitExpense: 'Submit your expenses below:',
             defaultCategory: 'Default category',
             viewTransactions: 'View transactions',
+            policyExpenseChatName: ({displayName}: PolicyExpenseChatNameParams) => `${displayName}'s expenses`,
         },
         perDiem: {
             subtitle: 'Set per diem rates to control daily employee spend. ',
@@ -3461,13 +3481,12 @@ const translations = {
                 expense: 'Expense',
                 reimbursableExpenses: 'Export reimbursable expenses as',
                 nonReimbursableExpenses: 'Export non-reimbursable expenses as',
+                defaultPaymentAccount: 'NSQS default',
+                paymentAccount: 'Payment account',
+                paymentAccountDescription: 'Choose the account that will be used as the payment account for transactions NSQS.',
             },
             advanced: {
                 autoSyncDescription: 'Sync NSQS and Expensify automatically, every day. Export finalized report in realtime',
-                defaultApprovalAccount: 'NSQS default',
-                approvalAccount: 'A/P approval account',
-                approvalAccountDescription:
-                    'Choose the account that transactions will be approved against in NSQS. If you’re syncing reimbursed reports, this is also the account that bill payments will be created against.',
             },
         },
         intacct: {
@@ -3551,9 +3570,9 @@ const translations = {
                     heading: 'We have a direct integration with your card issuer and can import your transaction data into Expensify quickly and accurately.\n\nTo get started, simply:',
                     visa: 'We have global integrations with Visa, though eligibility varies by bank and card program.\n\nTo get started, simply:',
                     mastercard: 'We have global integrations with Mastercard, though eligibility varies by bank and card program.\n\nTo get started, simply:',
-                    vcf: `1. Visit [this help article](${CONST.COMPANY_CARDS_HELP}) for detailed instructions on how to set up your Visa Commercial Cards.\n\n2. [Contact your bank](${CONST.COMPANY_CARDS_HELP}) to verify they support a commercial feed for your program, and ask them to enable it.\n\n3. *Once the feed is enabled and you have its details, continue to the next screen.*`,
-                    gl1025: `1. Visit [this help article](${CONST.COMPANY_CARDS_HELP}) to find out if American Express can enable a commercial feed for your program.\n\n2. Once the feed is enabled, Amex will send you a production letter.\n\n3. *Once you have the feed information, continue to the next screen.*`,
-                    cdf: `1. Visit [this help article](${CONST.COMPANY_CARDS_HELP}) for detailed instructions on how to set up your Mastercard Commercial Cards.\n\n 2. [Contact your bank](${CONST.COMPANY_CARDS_HELP}) to verify they support a commercial feed for your program, and ask them to enable it.\n\n3. *Once the feed is enabled and you have its details, continue to the next screen.*`,
+                    vcf: `1. Visit [this help article](${CONST.COMPANY_CARDS_VISA_COMMERICAL_CARD_HELP}) for detailed instructions on how to set up your Visa Commercial Cards.\n\n2. [Contact your bank](${CONST.COMPANY_CARDS_VISA_COMMERICAL_CARD_HELP}) to verify they support a commercial feed for your program, and ask them to enable it.\n\n3. *Once the feed is enabled and you have its details, continue to the next screen.*`,
+                    gl1025: `1. Visit [this help article](${CONST.COMPANY_CARDS_AMEX_COMMERICAL_CARD_HELP}) to find out if American Express can enable a commercial feed for your program.\n\n2. Once the feed is enabled, Amex will send you a production letter.\n\n3. *Once you have the feed information, continue to the next screen.*`,
+                    cdf: `1. Visit [this help article](${CONST.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS}) for detailed instructions on how to set up your Mastercard Commercial Cards.\n\n 2. [Contact your bank](${CONST.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS}) to verify they support a commercial feed for your program, and ask them to enable it.\n\n3. *Once the feed is enabled and you have its details, continue to the next screen.*`,
                     stripe: `1. Visit Stripe’s Dashboard, and go to [Settings](${CONST.COMPANY_CARDS_STRIPE_HELP}).\n\n2. Under Product Integrations, click Enable next to Expensify.\n\n3. Once the feed is enabled, click Submit below and we’ll work on adding it.`,
                 },
                 whatBankIssuesCard: 'What bank issues these cards?',
@@ -3826,6 +3845,10 @@ const translations = {
                 updating: 'Updating...',
                 noAccountsFound: 'No accounts found',
                 defaultCard: 'Default card',
+                downgradeTitle: `Can't downgrade workspace`,
+                downgradeSubTitleFirstPart: `This workspace can't be downgraded because multiple card feeds are connected (excluding Expensify Cards). Please`,
+                downgradeSubTitleMiddlePart: `keep only one card feed`,
+                downgradeSubTitleLastPart: 'to proceed.',
                 noAccountsFoundDescription: ({connection}: ConnectionParams) => `Please add the account in ${connection} and sync the connection again.`,
                 expensifyCardBannerTitle: 'Get the Expensify Card',
                 expensifyCardBannerSubtitle: 'Enjoy cash back on every US purchase, up to 50% off your Expensify bill, unlimited virtual cards, and so much more.',
@@ -3834,6 +3857,8 @@ const translations = {
             workflows: {
                 title: 'Workflows',
                 subtitle: 'Configure how spend is approved and paid.',
+                disableApprovalPrompt:
+                    'Expensify Cards from this workspace currently rely on approval to define their Smart Limits. Please amend the limit types of any Expensify Cards with Smart Limits before disabling approvals.',
             },
             invoices: {
                 title: 'Invoices',
@@ -4013,6 +4038,8 @@ const translations = {
             newWorkspace: 'New workspace',
             getTheExpensifyCardAndMore: 'Get the Expensify Card and more',
             confirmWorkspace: 'Confirm Workspace',
+            myGroupWorkspace: 'My Group Workspace',
+            workspaceName: ({userName, workspaceNumber}: NewWorkspaceNameParams) => `${userName}'s Workspace${workspaceNumber ? ` ${workspaceNumber}` : ''}`,
         },
         people: {
             genericFailureMessage: 'An error occurred removing a member from the workspace, please try again.',
@@ -4554,9 +4581,9 @@ const translations = {
                 onlyAvailableOnPlan: 'Tax codes are only available on the Control plan, starting at ',
             },
             companyCards: {
-                title: 'Company cards',
-                description: `Connect your existing corporate cards to Expensify, assign them to employees, and automatically import transactions.`,
-                onlyAvailableOnPlan: 'Company cards are only available on the Control plan, starting at ',
+                title: 'Unlimited Company cards',
+                description: `Need to add more card feeds? Unlock unlimited company cards to sync transactions from all major card issuers.`,
+                onlyAvailableOnPlan: 'This is only available on the Control plan, starting at ',
             },
             rules: {
                 title: 'Rules',
@@ -4704,11 +4731,6 @@ const translations = {
                 unlockFeatureGoToSubtitle: 'Go to',
                 unlockFeatureEnableWorkflowsSubtitle: ({featureName}: FeatureNameParams) => `and enable workflows, then add ${featureName} to unlock this feature.`,
                 enableFeatureSubtitle: ({featureName}: FeatureNameParams) => `and enable ${featureName} to unlock this feature.`,
-                preventSelfApprovalsModalText: ({managerEmail}: {managerEmail: string}) =>
-                    `Any members currently approving their own expenses will be removed and replaced with the default approver for this workspace (${managerEmail}).`,
-                preventSelfApprovalsConfirmButton: 'Prevent self-approvals',
-                preventSelfApprovalsModalTitle: 'Prevent self-approvals?',
-                preventSelfApprovalsDisabledSubtitle: "Self approvals can't be enabled until this workspace has at least two members.",
             },
             categoryRules: {
                 title: 'Category rules',
@@ -4854,6 +4876,12 @@ const translations = {
             `changed the maximum expense amount for violations to ${newValue} (previously ${oldValue})`,
         updateMaxExpenseAge: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) =>
             `updated "Max expense age (days)" to "${newValue}" (previously "${oldValue === 'false' ? CONST.POLICY.DEFAULT_MAX_EXPENSE_AGE : oldValue}")`,
+        updateMonthlyOffset: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) => {
+            if (!oldValue) {
+                return `set the monthly report submission date to "${newValue}"`;
+            }
+            return `updated the monthly report submission date to "${newValue}" (previously "${oldValue}")`;
+        },
         updateDefaultBillable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) => `updated "Re-bill expenses to clients" to "${newValue}" (previously "${oldValue}")`,
         updateDefaultTitleEnforced: ({value}: UpdatedPolicyFieldWithValueParam) => `turned "Enforce default report titles" ${value ? 'on' : 'off'}`,
         renamedWorkspaceNameAction: ({oldName, newName}: RenamedRoomActionParams) => `updated the name of this workspace to "${newName}" (previously "${oldName}")`,
@@ -5002,9 +5030,11 @@ const translations = {
             card: {
                 expensify: 'Expensify',
                 individualCards: 'Individual cards',
+                closedCards: 'Closed cards',
                 cardFeeds: 'Card feeds',
                 cardFeedName: ({cardFeedBankName, cardFeedLabel}: {cardFeedBankName: string; cardFeedLabel?: string}) =>
                     `All ${cardFeedBankName}${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
+                cardFeedNameCSV: ({cardFeedLabel}: {cardFeedLabel?: string}) => `All CSV Imported Cards${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
             },
             current: 'Current',
             past: 'Past',
@@ -5116,6 +5146,10 @@ const translations = {
         },
     },
     report: {
+        newReport: {
+            createReport: 'Create report',
+            chooseWorkspace: 'Choose a workspace for this report.',
+        },
         genericCreateReportFailureMessage: 'Unexpected error creating this chat. Please try again later.',
         genericAddCommentFailureMessage: 'Unexpected error posting the comment. Please try again later.',
         genericUpdateReportFieldFailureMessage: 'Unexpected error updating the field. Please try again later.',
@@ -5125,7 +5159,7 @@ const translations = {
             type: {
                 changeField: ({oldValue, newValue, fieldName}: ChangeFieldParams) => `changed ${fieldName} from ${oldValue} to ${newValue}`,
                 changeFieldEmpty: ({newValue, fieldName}: ChangeFieldParams) => `changed ${fieldName} to ${newValue}`,
-                changePolicy: ({fromPolicy, toPolicy}: ChangePolicyParams) => `changed workspace from ${fromPolicy} to ${toPolicy}`,
+                changePolicy: ({fromPolicy, toPolicy}: ChangePolicyParams) => `changed the workspace to ${toPolicy} (previously ${fromPolicy})`,
                 changeType: ({oldType, newType}: ChangeTypeParams) => `changed type from ${oldType} to ${newType}`,
                 delegateSubmit: ({delegateUser, originalManager}: DelegateSubmitParams) => `sent this report to ${delegateUser} since ${originalManager} is on vacation`,
                 exportedToCSV: `exported this report to CSV`,
@@ -5448,7 +5482,7 @@ const translations = {
         adminBrokenConnectionError: 'Receipt pending due to broken bank connection. Please resolve in ',
         memberBrokenConnectionError: 'Receipt pending due to broken bank connection. Please ask a workspace admin to resolve.',
         markAsCashToIgnore: 'Mark as cash to ignore and request payment.',
-        smartscanFailed: 'Receipt scanning failed. Enter details manually.',
+        smartscanFailed: ({canEdit = true}) => `Receipt scanning failed.${canEdit ? ' Enter details manually.' : ''}`,
         someTagLevelsRequired: ({tagName}: ViolationsTagOutOfPolicyParams = {}) => `Missing ${tagName ?? 'Tag'}`,
         tagOutOfPolicy: ({tagName}: ViolationsTagOutOfPolicyParams = {}) => `${tagName ?? 'Tag'} no longer valid`,
         taxAmountChanged: 'Tax amount was modified',
@@ -5931,13 +5965,13 @@ const translations = {
         },
         scanTestTooltip: {
             part1: 'Want to see how Scan works?',
-            part2: ' Try a test receipt!',
+            part2: ' Try a test \nreceipt!',
             part3: 'Choose our',
             part4: ' test manager',
             part5: ' to try it out!',
             part6: 'Now,',
             part7: ' submit your expense',
-            part8: ' and watch the magic happen!',
+            part8: ' and watch the\nmagic happen!',
             tryItOut: 'Try it out',
             noThanks: 'No thanks',
         },

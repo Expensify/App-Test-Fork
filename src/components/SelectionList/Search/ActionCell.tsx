@@ -51,7 +51,7 @@ function ActionCell({
     const text = isChildListItem ? translate(actionTranslationsMap[CONST.SEARCH.ACTION_TYPES.VIEW]) : translate(actionTranslationsMap[action]);
     const shouldUseViewAction = action === CONST.SEARCH.ACTION_TYPES.VIEW || (parentAction === CONST.SEARCH.ACTION_TYPES.PAID && action === CONST.SEARCH.ACTION_TYPES.PAID);
 
-    if ((parentAction !== CONST.SEARCH.ACTION_TYPES.PAID && action === CONST.SEARCH.ACTION_TYPES.PAID) || action === CONST.SEARCH.ACTION_TYPES.DONE) {
+    if ((parentAction !== CONST.SEARCH.ACTION_TYPES.PAID && action === CONST.SEARCH.ACTION_TYPES.PAID) || (action === CONST.SEARCH.ACTION_TYPES.DONE && !isChildListItem)) {
         return (
             <View style={[StyleUtils.getHeight(variables.h28), styles.justifyContentCenter]}>
                 <Badge
@@ -74,7 +74,7 @@ function ActionCell({
         );
     }
 
-    if (action === CONST.SEARCH.ACTION_TYPES.VIEW || action === CONST.SEARCH.ACTION_TYPES.REVIEW || shouldUseViewAction) {
+    if (action === CONST.SEARCH.ACTION_TYPES.VIEW || action === CONST.SEARCH.ACTION_TYPES.REVIEW || shouldUseViewAction || (action === CONST.SEARCH.ACTION_TYPES.DONE && isChildListItem)) {
         const buttonInnerStyles = isSelected ? styles.buttonDefaultSelected : {};
 
         return isLargeScreenWidth ? (
@@ -89,6 +89,7 @@ function ActionCell({
                 icon={!isChildListItem && action === CONST.SEARCH.ACTION_TYPES.REVIEW ? Expensicons.DotIndicator : undefined}
                 iconFill={theme.danger}
                 iconHoverFill={theme.dangerHover}
+                isNested
             />
         ) : null;
     }
@@ -102,6 +103,7 @@ function ActionCell({
             isLoading={isLoading}
             success
             isDisabled={isOffline}
+            isNested
         />
     );
 }
