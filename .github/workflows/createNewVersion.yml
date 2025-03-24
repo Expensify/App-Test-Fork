@@ -81,13 +81,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.OS_BOTIFY_COMMIT_TOKEN }}
           SEMVER_LEVEL: ${{ inputs.SEMVER_LEVEL }}
 
-      - name: Update Mobile-Expensify submodule with the latest state of the Mobile-Expensify main branch
-        run: |
-          cd Mobile-Expensify
-          git fetch --depth=1 origin main
-          git checkout main
-          git reset --hard origin/main
-
       - name: Generate HybridApp version
         run: |
           cd Mobile-Expensify
