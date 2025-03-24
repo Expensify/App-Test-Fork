@@ -83,7 +83,10 @@ jobs:
 
       - name: Generate HybridApp version
         run: |
+          # Checkout main branch in Mobile-Expensify submodule.
+          # This is IMPORTANT so that when we make changes, we aren't in a detached head state, and when we later push those changes to main, it works!
           cd Mobile-Expensify
+          git checkout main
 
           # Generate all flavors of the version
           SHORT_APP_VERSION=$(echo "$NEW_VERSION" | awk -F'-' '{print $1}')
