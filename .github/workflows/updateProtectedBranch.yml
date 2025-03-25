@@ -60,6 +60,7 @@ jobs:
 
           # Commit the change to the Mobile-Expensify submodule
           cd Mobile-Expensify
+          git checkout ${{ inputs.TARGET_BRANCH }}
           MOBILE_EXPENSIFY_HEAD="$(git rev-parse --short HEAD)"
           cd ..
           git add Mobile-Expensify
