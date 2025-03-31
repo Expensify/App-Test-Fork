@@ -62,7 +62,8 @@ jobs:
     if: ${{ !github.event.pull_request.head.repo.fork && github.event_name == 'pull_request' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           submodules: true
           ref: ${{ github.event.pull_request.head.sha }}
@@ -84,7 +85,8 @@ jobs:
           IS_HYBRID_BUILD: 'true'
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.204.0
+        # v1.204.0
+        uses: ruby/setup-ruby@a6e6f86333f0a2523ece813039b8b4be04560854
         with:
           bundler-cache: true
 
@@ -103,7 +105,8 @@ jobs:
     if: ${{ !github.event.pull_request.head.repo.fork && github.event_name == 'pull_request' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           submodules: true
           ref: ${{ github.event.pull_request.head.sha }}
@@ -125,12 +128,14 @@ jobs:
           IS_HYBRID_BUILD: 'true'
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.204.0
+        # v1.204.0
+        uses: ruby/setup-ruby@a6e6f86333f0a2523ece813039b8b4be04560854
         with:
           bundler-cache: true
 
       - name: Cache Pod dependencies
-        uses: actions/cache@v4
+        # v4
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
         id: pods-cache
         with:
           path: Mobile-Expensify/iOS/Pods
