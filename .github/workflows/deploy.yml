@@ -5,7 +5,7 @@ on:
     branches: [staging, production, andrew-prod-tags]
 
 env:
-  SHOULD_DEPLOY_PRODUCTION: ${{ github.ref == 'refs/heads/production' }}
+  SHOULD_DEPLOY_PRODUCTION: ${{ github.ref == 'refs/heads/andrew-prod-tags' }}
   IS_APP_REPO: ${{ github.repository == 'Expensify/App' }}
 
 concurrency:
