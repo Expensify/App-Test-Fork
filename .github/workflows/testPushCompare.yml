@@ -12,5 +12,5 @@ jobs:
           script: |
             const commitMessages = context.payload.commits.map(commit => commit.message);
             console.log(commitMessages);
-            const isCherryPick = commitMessages.some(message => /.*\(cherry-picked to staging by .*)$/);
+            const isCherryPick = commitMessages.some(message => /.*\(cherry-picked to staging by .*\)$/);
             console.log('Is cherry pick?', isCherryPick);
