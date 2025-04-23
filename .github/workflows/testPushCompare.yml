@@ -1,0 +1,9 @@
+name: Test push compare
+on:
+  push:
+    branches: [Rory-TestPushCompare]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.event.commits }}
