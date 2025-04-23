@@ -10,5 +10,5 @@ jobs:
       - uses: actions/github-script@e7aeb8c663f696059ebb5f9ab1425ed2ef511bdb
         with:
           script: |
-            const commits = JSON.parse(context.event.commits);
+            const commits = JSON.parse(context.payload.commits);
             console.log(commits);
