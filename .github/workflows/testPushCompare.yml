@@ -6,4 +6,5 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # Going to add amend
       - run: echo '${{ toJSON(github.event.commits) }}'
