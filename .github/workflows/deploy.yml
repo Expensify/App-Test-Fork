@@ -700,7 +700,8 @@ jobs:
       SEMVER_LEVEL: BUILD
 
   cherryPickVersionBump:
-    needs: [createNewVersion]
+    needs: [createNewVersion, checkDeploymentSuccess, prep]
+    if: ${{ always() && fromJSON(needs.checkDeploymentSuccess.outputs.IS_AT_LEAST_ONE_PLATFORM_DEPLOYED) && github.ref == 'refs/heads/production' && fromJSON(needs.prep.outputs.IS_CHERRY_PICK) }}
     runs-on: ubuntu-latest
     steps:
       # v4.2.2
@@ -779,7 +780,7 @@ jobs:
         run: |
           git switch staging
           git cherry-pick -S -x --mainline 1 --strategy=recursive -Xtheirs ${{ steps.getVersionBumpCommit.outputs.VERSION_BUMP_SHA }}
-          git commit --amend -m "$(git log -1 --pretty=%B)" -m "(cherry-picked to ${{ inputs.TARGET }} by ${{ github.actor }})"
+          git commit --amend -m "$(git log -1 --pretty=%B)" -m "(cherry-picked to staging by ${{ github.actor }})"
           git push origin staging
 
       - name: Update the Mobile-Expensify submodule on E/App staging
@@ -789,7 +790,8 @@ jobs:
 
   updateChecklistWithVersionBump:
     name: Update deploy checklist with the new version bump
-    needs: cherryPickVersionBump
+    needs: [prep, checkDeploymentSuccess, cherryPickVersionBump]
+    if: ${{ always() && fromJSON(needs.checkDeploymentSuccess.outputs.IS_AT_LEAST_ONE_PLATFORM_DEPLOYED) && github.ref == 'refs/heads/production' && fromJSON(needs.prep.outputs.IS_CHERRY_PICK) }}
     uses: ./.github/workflows/createDeployChecklist.yml
     secrets: inherit
 
