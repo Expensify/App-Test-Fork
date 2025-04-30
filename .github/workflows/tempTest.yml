@@ -1,0 +1,17 @@
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ 'false' == 'true' }}
+        id: skippedStep
+        run: echo "SKIPPED=true" >> "$GITHUB_OUTPUT"
+
+      - run: |
+          if [[ ${{ steps.skippedStep.outputs.SKIPPED }} == 'true' ]]; then
+            echo "whoa"
+          else
+            echo "That's expected"
+          fi
