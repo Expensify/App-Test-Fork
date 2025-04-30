@@ -84,6 +84,8 @@ jobs:
       - name: Show diff
         run: |
           git diff HEAD
+          cd Mobile-Expensify
+          git diff HEAD
           exit 1
 
       - name: Commit new Mobile-Expensify version
