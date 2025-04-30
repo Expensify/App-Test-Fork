@@ -3720,6 +3720,7 @@ async function updateConfigJSON(version) {
     }
 }
 async function run(semanticVersionLevel) {
+    console.log('RORY_DEBUG new CLI version running.');
     // Parse the current version from package.json
     const { version: previousVersion } = JSON.parse(await fs_1.promises.readFile(PACKAGE_JSON_PATH, { encoding: 'utf8' }));
     if (!previousVersion) {
