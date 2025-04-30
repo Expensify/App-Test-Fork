@@ -10,7 +10,7 @@ jobs:
         run: echo "SKIPPED=true" >> "$GITHUB_OUTPUT"
 
       - run: |
-          if [[ ${{ steps.skippedStep.outputs.SKIPPED }} == 'true' ]]; then
+          if [[ ${{ steps.skippedStep.outputs.SKIPPED && 'true' || 'false' }} == 'true' ]]; then
             echo "whoa"
           else
             echo "That's expected"
