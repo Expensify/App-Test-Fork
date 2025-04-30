@@ -3581,6 +3581,7 @@ const versionUpdater = __importStar(__nccwpck_require__(8982));
 const exec = (0, util_1.promisify)(child_process_1.exec);
 // PlistBuddy executable path
 const PLIST_BUDDY = '/usr/libexec/PlistBuddy';
+console.log('RORY_DEBUG __dirname', __dirname);
 // Filepath constants
 const ROOT_DIR = path_1.default.resolve(__dirname, '..');
 const PACKAGE_JSON_PATH = path_1.default.resolve(ROOT_DIR, 'package.json');

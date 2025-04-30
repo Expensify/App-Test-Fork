@@ -23,6 +23,8 @@ type ConfigJSON = {
 // PlistBuddy executable path
 const PLIST_BUDDY = '/usr/libexec/PlistBuddy';
 
+console.log('RORY_DEBUG __dirname', __dirname);
+
 // Filepath constants
 const ROOT_DIR = path.resolve(__dirname, '..');
 const PACKAGE_JSON_PATH = path.resolve(ROOT_DIR, 'package.json');
