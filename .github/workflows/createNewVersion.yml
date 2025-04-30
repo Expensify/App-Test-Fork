@@ -81,6 +81,11 @@ jobs:
         with:
           SEMVER_LEVEL: ${{ inputs.SEMVER_LEVEL }}
 
+      - name: Show diff
+        run: |
+          git diff HEAD
+          exit 1
+
       - name: Commit new Mobile-Expensify version
         working-directory: Mobile-Expensify
         run: |
