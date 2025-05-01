@@ -406,7 +406,7 @@ prefer to return the created/updated data in the command itself, instead of savi
 we should prefer making `CreateTransaction` return the data it just created instead of calling `CreateTransaction` then `Get` rvl=transactionList
 
 ## Storage Eviction
-
+ 
 Different platforms come with varying storage capacities and Onyx has a way to gracefully fail when those storage limits are encountered. When Onyx fails to set or modify a key the following steps are taken:
 1. Onyx looks at a list of recently accessed keys (access is defined as subscribed to or modified) and locates the key that was least recently accessed
 2. It then deletes this key and retries the original operation
