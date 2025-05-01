@@ -511,7 +511,7 @@ If for some reason, you need to target the standalone NewDot application, you ca
 ### Working with HybridApp vs Standalone NewDot
 
 Day-to-day work with **HybridApp** shouldn't differ much from working on the standalone **NewDot** repository.  
-The primary difference is that the native code, which runs React Native, is located in the following directories:  
+The primary difference is that the native code, which runs React Native, is located in the following directories:
 
 - `./Mobile-Expensify/Android`
 - `./Mobile-Expensify/iOS`
