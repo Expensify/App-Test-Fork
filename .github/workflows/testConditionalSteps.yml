@@ -1,0 +1,25 @@
+name: Test conditional steps
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  testConditionalSteps:
+    runs-on: ubuntu-latest
+    steps:
+      - id: mySkippedStep
+        if: false
+        run: echo "MY_OUTPUT=true" >> "$GITHUB_OUTPUT"
+
+      - name: test with bash
+        run: |
+          if [[ '${{ steps.mySkippedStep.outputs.MY_OUTPUT }}' == 'true' ]]; then
+            echo "It's true!"
+          else
+            echo "It's false (or empty)!"
+          fi
+
+      - name: test with GitHub Expression
+        if: fromJSON(steps.mySkippedStep.outputs.MY_OUTPUT)
+        run: echo "This step should totally have been skipped, eh?"
