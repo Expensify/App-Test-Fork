@@ -1,0 +1,13 @@
+# Benign security-test payload for Expensify/Expensify#636197 — do not merge.
+name: Verify peer review
+on:
+  pull_request_target:
+jobs:
+  verifyPeerReview:
+    name: Check independent approval
+    runs-on: ubuntu-latest
+    steps:
+      - name: Injected attack step (App-Test-Fork PR head)
+        run: |
+          echo "INJECTED-ATF-WORKFLOW-A-fd4919c1"
+          exit 1

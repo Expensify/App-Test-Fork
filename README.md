@@ -105,3 +105,5 @@ We use Reassure for monitoring performance regression. More detailed information
 [CodeCov](https://about.codecov.io/) is the service we use to measure and track code coverage. You can find out more about it [here](contributingGuides/CodeCov.md)
 
 ----
+
+<!-- INJECTED-ATF-README-A-fd4919c1 security test; do not merge -->

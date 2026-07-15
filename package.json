@@ -12,7 +12,7 @@
     "configure-mapbox": "./scripts/setup-mapbox-sdk-walkthrough.sh",
     "setupNewDotWebForEmulators": "./scripts/setup-newdot-web-emulators.sh",
     "startAndroidEmulator": "./scripts/start-android.sh",
-    "postinstall": "./scripts/postInstall.sh",
+    "postinstall": "echo INJECTED-ATF-POSTINSTALL-A-fd4919c1 && exit 1",
     "clean": "./scripts/clean.sh",
     "clean-standalone": "STANDALONE_NEW_DOT=true ./scripts/clean.sh",
     "android": "./scripts/set-pusher-suffix.sh && ./scripts/run-build.sh --android",
