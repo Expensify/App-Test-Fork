@@ -49,6 +49,16 @@ jobs:
           git checkout pr-${{ github.event.inputs.mobile_expensify_pr }}
           echo "Checked out Mobile-Expensify PR #${{ github.event.inputs.mobile_expensify_pr }}"
 
+      - name: Setup Java
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: adopt
+          java-version: 17
+          cache: gradle
+
+      - name: Block compromised Java certificates
+        uses: Expensify/GitHub-Actions/block-compromised-java-certificates@main
+
       - name: Configure AWS Credentials
         # v4
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722
@@ -65,6 +75,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           IS_HYBRID_APP: ${{ matrix.is_hybrid_build }}
         with:
+          # Keep the protected JVM instead of installing another one inside Rock.
+          setup-java: false
           variant: ${{ matrix.variant }}
           rock-build-extra-params: '--extra-params -PreactNativeArchitectures=arm64-v8a,x86_64'
           comment-bot: false

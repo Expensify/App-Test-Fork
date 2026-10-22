@@ -299,6 +299,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Setup Java
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: adopt
+          java-version: 17
+          cache: gradle
+
+      - name: Block compromised Java certificates
+        uses: Expensify/GitHub-Actions/block-compromised-java-certificates@main
+
       - name: Rock Remote Build - Android
         id: rock-remote-build-android
         uses: callstackincubator/android@0bbc1b7c2e1a8be1ecb4d6c744c211869823fd65
@@ -307,6 +317,8 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           IS_HYBRID_APP: true
         with:
+          # Keep the protected JVM instead of installing another one inside Rock.
+          setup-java: false
           variant: 'Adhoc'
           sign: true
           re-sign: true

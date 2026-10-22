@@ -120,6 +120,9 @@ jobs:
           distribution: oracle
           java-version: ${{ steps.get-java-version.outputs.version }}
 
+      - name: Block compromised Java certificates
+        uses: Expensify/GitHub-Actions/block-compromised-java-certificates@main
+
       - name: Setup Ruby
         # v1.229.0
         uses: ruby/setup-ruby@354a1ad156761f5ee2b7b13fa8e09943a5e8d252
