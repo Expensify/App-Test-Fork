@@ -299,6 +299,32 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Get Java version
+        id: get-java-version
+        uses: ./.github/actions/composite/getJavaVersion
+
+      - name: Setup Java
+        # v4
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12
+        with:
+          distribution: adopt
+          java-version: ${{ steps.get-java-version.outputs.version }}
+          cache: gradle
+
+      - name: Block compromised Java certificates
+        uses: Expensify/GitHub-Actions/block-compromised-java-certificates@d8dfc3ddd4d8626206653c6168ca8d094547749a
+
+      - name: Restrict Gradle to the protected JDK
+        run: |
+          # Prevent cached or downloaded toolchains from bypassing the certificate blocklist.
+          mkdir -p "$HOME/.gradle"
+          cat >> "$HOME/.gradle/gradle.properties" <<EOF
+          org.gradle.java.installations.auto-detect=false
+          org.gradle.java.installations.auto-download=false
+          org.gradle.java.installations.fromEnv=JAVA_HOME
+          org.gradle.java.installations.paths=$JAVA_HOME
+          EOF
+
       - name: Rock Remote Build - Android
         id: rock-remote-build-android
         uses: callstackincubator/android@0bbc1b7c2e1a8be1ecb4d6c744c211869823fd65
@@ -308,6 +334,8 @@ jobs:
           IS_HYBRID_APP: true
         with:
           variant: 'Adhoc'
+          # Java is installed and protected before Rock can run Gradle.
+          setup-java: false
           sign: true
           re-sign: true
           ad-hoc: true

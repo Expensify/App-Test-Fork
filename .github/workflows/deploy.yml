@@ -120,6 +120,20 @@ jobs:
           distribution: oracle
           java-version: ${{ steps.get-java-version.outputs.version }}
 
+      - name: Block compromised Java certificates
+        uses: Expensify/GitHub-Actions/block-compromised-java-certificates@d8dfc3ddd4d8626206653c6168ca8d094547749a
+
+      - name: Restrict Gradle to the protected JDK
+        run: |
+          # Prevent cached or downloaded toolchains from bypassing the certificate blocklist.
+          mkdir -p "$HOME/.gradle"
+          cat >> "$HOME/.gradle/gradle.properties" <<EOF
+          org.gradle.java.installations.auto-detect=false
+          org.gradle.java.installations.auto-download=false
+          org.gradle.java.installations.fromEnv=JAVA_HOME
+          org.gradle.java.installations.paths=$JAVA_HOME
+          EOF
+
       - name: Setup Ruby
         # v1.229.0
         uses: ruby/setup-ruby@354a1ad156761f5ee2b7b13fa8e09943a5e8d252
